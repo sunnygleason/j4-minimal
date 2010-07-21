@@ -1,5 +1,10 @@
 package com.g414.j4.minimal;
 
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
+
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -17,7 +22,13 @@ public class SampleConfig extends GuiceServletContextListener {
         return Guice.createInjector(new ServletModule() {
             @Override
             protected void configureServlets() {
+                /* bind the REST resources */
                 bind(SampleResource.class);
+                bind(JacksonResource.class);
+
+                /* bind jackson converters for JAXB/JSON serialization */
+                bind(MessageBodyReader.class).to(JacksonJsonProvider.class);
+                bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
 
                 serve("*").with(GuiceContainer.class);
             }

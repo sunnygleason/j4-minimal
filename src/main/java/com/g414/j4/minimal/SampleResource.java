@@ -6,7 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * The Jersey Resource itself. Note that this class is a POJO - it does not need
+ * A minimal Jersey Resource. Note that this class is a POJO - it does not need
  * to know anything about Guice. Although, if we wanted to Inject members using
  * Guice, we could!
  */
