@@ -7,6 +7,7 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.internal.ImmutableMap;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -23,6 +24,7 @@ public class SampleConfig extends GuiceServletContextListener {
             @Override
             protected void configureServlets() {
                 /* bind the REST resources */
+                bind(BenchResource.class);
                 bind(SampleResource.class);
                 bind(JacksonResource.class);
 
@@ -30,7 +32,10 @@ public class SampleConfig extends GuiceServletContextListener {
                 bind(MessageBodyReader.class).to(JacksonJsonProvider.class);
                 bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
 
-                serve("*").with(GuiceContainer.class);
+                serve("*").with(
+                        GuiceContainer.class,
+                        ImmutableMap.of("com.sun.jersey.config.feature.Trace",
+                                "true"));
             }
         });
     }
