@@ -1,5 +1,8 @@
 package com.g414.j4.minimal;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
@@ -7,7 +10,6 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.internal.ImmutableMap;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -31,11 +33,12 @@ public class SampleConfig extends GuiceServletContextListener {
                 /* bind jackson converters for JAXB/JSON serialization */
                 bind(MessageBodyReader.class).to(JacksonJsonProvider.class);
                 bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
-
+                Map<String, String> initParams = new HashMap<String, String>();
+                initParams.put("com.sun.jersey.config.feature.Trace",
+                        "true");
                 serve("*").with(
                         GuiceContainer.class,
-                        ImmutableMap.of("com.sun.jersey.config.feature.Trace",
-                                "true"));
+                        initParams);
             }
         });
     }
